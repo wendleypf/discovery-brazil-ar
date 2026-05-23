@@ -11,6 +11,7 @@
 <body>
 
 <a-scene
+        isMobile
         vr-mode-ui="enabled: false"
         loading-screen="dotsColor: red; backgroundColor: black"
         arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
@@ -20,13 +21,11 @@
     <a-assets>
         <img id="map-marker" src="./assets/map-marker.png">
     </a-assets>
-
     <a-image
             id="marker"
-            class="clickable"
             name="Parque do povo"
             src="#map-marker"
-            scale="20 20"
+            scale="10 10 10"
             look-at="[gps-camera]"
             gps-entity-place="latitude: -7.253013853760671; longitude: -35.915053939074824">
     </a-image>
@@ -38,11 +37,42 @@
 </a-scene>
 
 <script>
-    const marker = document.querySelector('#marker');
+    window.onload = () => {
+        const marker = document.querySelector('#marker');
+        marker.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
+        const clickListener = function(ev) {
+            ev.stopPropagation();
+            ev.preventDefault();
 
-    marker.addEventListener('click', () => {
-        window.open('https://www.google.com.br', '_blank');
-    });
+            const name = ev.target.getAttribute('name');
+
+            const el = ev.detail.intersection && ev.detail.intersection.object.el;
+
+            if (el && el === ev.target) {
+                const label = document.createElement('span');
+                const container = document.createElement('div');
+                container.setAttribute('id', 'place-label');
+                label.innerText = name;
+                container.appendChild(label);
+                document.body.appendChild(container);
+
+                setTimeout(() => {
+                    container.parentElement.removeChild(container);
+                }, 1500);
+            }
+        };
+        marker.addEventListener('click', clickListener);
+
+    }
+    // const marker = document.querySelector('#marker');
+    //
+    // marker.addEventListener('click', () => {
+    //     window.open('https://www.google.com.br', '_blank');
+    // });
+    // marker.addEventListener('loaded', () => {
+    //     console.log('Marker loaded');
+    //     window.dispatchEvent(new CustomEvent('gps-entity-place-loaded'))
+    // });
 </script>
 
 </body>
