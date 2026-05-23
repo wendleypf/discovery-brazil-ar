@@ -39,7 +39,7 @@
             const image = document.createElement('a-image');
             image.setAttribute('name', 'Parque do povo');
             image.setAttribute('src', '#map-marker');
-            image.setAttribute('scale', '10 10');
+            image.setAttribute('scale', '10 10 10');
             image.setAttribute('look-at', '[gps-camera]');
             image.setAttribute('gps-entity-place', 'latitude: -7.253013853760671; longitude: -35.915053939074824');
             image.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
