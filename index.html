@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovery Brazil AR</title>
+    <script src="https://aframe.io/releases/1.7.1/aframe.min.js"></script>
+    <script src="https://unpkg.com/aframe-look-at-component@1.0.0/dist/aframe-look-at-component.min.js"></script>
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
+</head>
+<body>
+
+<a-scene
+        vr-mode-ui="enabled: false"
+        loading-screen="dotsColor: red; backgroundColor: black"
+        arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
+        raycaster="objects: .clickable"
+        cursor="rayOrigin: mouse">
+
+    <a-assets>
+        <img id="map-marker" src="./assets/map-marker.png">
+    </a-assets>
+
+    <a-image
+            id="marker"
+            class="clickable"
+            name="Parque do povo"
+            src="#map-marker"
+            width="30"
+            height="30"
+            scale="1 1 1"
+            look-at="[gps-camera]"
+            gps-entity-place="latitude: -7.253013853760671; longitude: -35.915053939074824">
+    </a-image>
+
+    <a-camera gps-camera rotation-reader>
+        <a-cursor></a-cursor>
+    </a-camera>
+
+</a-scene>
+
+<script>
+    const marker = document.querySelector('#marker');
+
+    marker.addEventListener('click', () => {
+        window.open('https://www.google.com.br', '_blank');
+    });
+</script>
+
+</body>
+</html>
