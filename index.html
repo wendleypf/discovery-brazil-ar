@@ -11,6 +11,7 @@
 <body>
 
 <a-scene
+        loading-screen="enabled: false;"
         vr-mode-ui="enabled: false"
         arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;">
     <a-assets>
@@ -25,8 +26,8 @@
 <!--            gps-entity-place="latitude: -7.253013853760671; longitude: -35.915053939074824">-->
 <!--    </a-image>-->
 
-    <a-camera gps-camera rotation-reader>
-        <a-cursor></a-cursor>
+    <a-camera gps-camera="minDistance:5; maxDistance:15; updateFrequency:500" rotation-reader>
+<!--        <a-cursor></a-cursor>-->
     </a-camera>
 
 </a-scene>
@@ -35,7 +36,6 @@
     window.onload = () => {
         const scene = document.querySelector('a-scene');
         scene.addEventListener('loaded', () => {
-            console.log('scene loaded');
             const image = document.createElement('a-image');
             image.setAttribute('name', 'Parque do povo');
             image.setAttribute('src', '#map-marker');
@@ -43,7 +43,6 @@
             image.setAttribute('look-at', '[gps-camera]');
             image.setAttribute('gps-entity-place', 'latitude: -7.253013853760671; longitude: -35.915053939074824');
             image.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
-
             scene.appendChild(image);
         })
         // console.log(scene);
