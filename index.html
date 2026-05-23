@@ -11,57 +11,72 @@
 <body>
 
 <a-scene
-        isMobile
         vr-mode-ui="enabled: false"
-        loading-screen="dotsColor: red; backgroundColor: black"
-        arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;"
-        raycaster="objects: .clickable"
-        cursor="rayOrigin: mouse">
-
+        arjs="sourceType: webcam; videoTexture: true; debugUIEnabled: false;">
     <a-assets>
         <img id="map-marker" src="./assets/map-marker.png">
     </a-assets>
-    <a-image
-            id="marker"
-            name="Parque do povo"
-            src="#map-marker"
-            scale="10 10 10"
-            look-at="[gps-camera]"
-            gps-entity-place="latitude: -7.253013853760671; longitude: -35.915053939074824">
-    </a-image>
+<!--    <a-image-->
+<!--            id="marker"-->
+<!--            name="Parque do povo"-->
+<!--            src="#map-marker"-->
+<!--            scale="10 10"-->
+<!--            look-at="[gps-camera]"-->
+<!--            gps-entity-place="latitude: -7.253013853760671; longitude: -35.915053939074824">-->
+<!--    </a-image>-->
 
     <a-camera gps-camera rotation-reader>
         <a-cursor></a-cursor>
     </a-camera>
 
 </a-scene>
-
+<!-- https://aframe.io/docs/1.7.0/introduction/visual-inspector-and-dev-tools.html#ngrok -->
 <script>
     window.onload = () => {
-        const marker = document.querySelector('#marker');
-        marker.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
-        const clickListener = function(ev) {
-            ev.stopPropagation();
-            ev.preventDefault();
+        const scene = document.querySelector('a-scene');
+        scene.addEventListener('loaded', () => {
+            console.log('scene loaded');
+            const image = document.createElement('a-image');
+            image.setAttribute('name', 'Parque do povo');
+            image.setAttribute('src', '#map-marker');
+            image.setAttribute('scale', '20 20');
+            image.setAttribute('look-at', '[gps-camera]');
+            image.setAttribute('gps-entity-place', 'latitude: -7.253013853760671; longitude: -35.915053939074824');
+            image.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
 
-            const name = ev.target.getAttribute('name');
-
-            const el = ev.detail.intersection && ev.detail.intersection.object.el;
-
-            if (el && el === ev.target) {
-                const label = document.createElement('span');
-                const container = document.createElement('div');
-                container.setAttribute('id', 'place-label');
-                label.innerText = name;
-                container.appendChild(label);
-                document.body.appendChild(container);
-
-                setTimeout(() => {
-                    container.parentElement.removeChild(container);
-                }, 1500);
-            }
-        };
-        marker.addEventListener('click', clickListener);
+            scene.appendChild(image);
+        })
+        // console.log(scene);
+        // if (scene.hasLoaded) {
+        //     console.log('Scene already loaded');
+        // } else {
+        //     console.log('Scene already not loaded');
+        //     // scene.addEventListener('loaded', run);
+        // }
+        // const marker = document.querySelector('#marker');
+        // marker.addEventListener('loaded', () => window.dispatchEvent(new CustomEvent('gps-entity-place-loaded')));
+        // const clickListener = function (ev) {
+        //     ev.stopPropagation();
+        //     ev.preventDefault();
+        //
+        //     const name = ev.target.getAttribute('name');
+        //
+        //     const el = ev.detail.intersection && ev.detail.intersection.object.el;
+        //
+        //     if (el && el === ev.target) {
+        //         const label = document.createElement('span');
+        //         const container = document.createElement('div');
+        //         container.setAttribute('id', 'place-label');
+        //         label.innerText = name;
+        //         container.appendChild(label);
+        //         document.body.appendChild(container);
+        //
+        //         setTimeout(() => {
+        //             container.parentElement.removeChild(container);
+        //         }, 1500);
+        //     }
+        // };
+        // marker.addEventListener('click', clickListener);
 
     }
     // const marker = document.querySelector('#marker');
